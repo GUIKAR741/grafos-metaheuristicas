@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="85.5mm" height="38.0mm" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 85.5 38.0">
+<defs>
+<style type="text/css">
+<![CDATA[
+.str0 {stroke:#373435;stroke-width:0.10}
+.str1 {stroke:black;stroke-width:0.10}
+.fil0 {fill:#E6E7E8}
+.fil1 {fill:#5A8335}
+.fil2 {fill:#E5A803}
+.fil3 {fill:#651854}
+.fil4 {fill:#349D80}
+.fil5 {fill:#349D80}
+.fil6 {fill:#54ABDA}
+.fil7 {fill:#D99BD8}
+.fil8 {fill:#B89A42}
+.fil9 {fill:#69AFA5}
+.fil10 {fill:#9C42BC}
+.fil11 {fill:#7A3586}
+.fil12 {fill:#8134DD}
+]]>
+</style>
+</defs>
+<g id="Camada_x0020_1">
+<metadata id="CorelCorpID_0Corel-Layer"/>
+<polygon class="fil0 str0" points="0.0,0.0 0.0,38.0 85.5,38.0 85.5,0.0 "/>
+<polygon class="fil1 str1" points="0.0,14.0 0.0,0.0 14.0,0.0 14.0,14.0 "/>
+<polygon class="fil2 str1" points="0.0,28.0 0.0,14.0 9.0,14.0 9.0,28.0 "/>
+<polygon class="fil3 str1" points="19.0,28.0 9.0,24.0 9.0,14.0 19.0,14.0 "/>
+<polygon class="fil4 str1" points="24.0,10.0 14.0,10.0 14.0,0.0 24.0,0.0 "/>
+<!-- <polygon class="fil5 str1" points="19.0,20.0 19.0,10.0 29.0,10.0 29.0,20.0 "/> -->
+<!-- <polygon class="fil6 str1" points="19.0,34.0 19.0,20.0 33.0,20.0 "/>
+<polygon class="fil7 str1" points="31.0,12.0 24.0,0.0 38.0,0.0 "/>
+<polygon class="fil8 str1" points="0.0,28.0 10.0,28.0 10.0,33.0 0.0,37.0 "/>
+<polygon class="fil9 str1" points="2.222,38.0 16.222,29.0 16.222,38.0 "/>
+<polygon class="fil10 str1" points="36.0,31.0 29.0,38.0 29.0,24.0 "/>
+<polygon class="fil11 str1" points="38.0,12.0 38.0,17.0 29.0,17.0 29.0,12.0 "/>
+<polygon class="fil12 str1" points="27.0,38.0 19.0,34.0 27.0,30.0 "/> -->
+</g></svg>
