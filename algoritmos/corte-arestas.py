@@ -1,6 +1,8 @@
 """."""
 from random import shuffle
 from pprint import pprint
+from shutil import rmtree
+from os import mkdir
 import matplotlib.pyplot as plt
 print, pprint = pprint, print
 
@@ -35,6 +37,11 @@ def dist2pt(x1, y1, x2, y2):
     return ((x1-x2)**2+(y1-y2)**2)**(1/2)
 
 
+def ptmed(x1, y1, x2, y2):
+    """."""
+    return (x1+x2)/2, (y1+y2)/2
+
+
 def corta(g: dict, pi: (int or float), mi: (int or float)):
     """Corta as arestas do grafo.
 
@@ -47,8 +54,12 @@ def corta(g: dict, pi: (int or float), mi: (int or float)):
     arestas = [(i, j) for i in g.keys() for j in g[i]]
     arestasCortadas = []
     cortadas = []
-    cores = ['red', 'black']
+    cores = ['red', 'yellow']
     shuffle(arestas)
+    rmtree('plot')
+    mkdir('plot')
+    plt.xlim(0, 40)
+    plt.ylim(0, 40)
     for i in range(len(arestas)):
         if not(arestas[i] in arestasCortadas or (arestas[i][1], arestas[i][0]) in arestasCortadas):
             x, y = [], []
@@ -79,11 +90,15 @@ def corta(g: dict, pi: (int or float), mi: (int or float)):
             y.append(arestas[i][1][1])
             arestasCortadas.append(arestas[i])
             plt.plot(x, y, '-*', color=cores[0])
-    print(cortadas)
-    print(len(arestasCortadas))
-    print(sum(somatorio))
-    plt.grid(True)
-    plt.show()
+            plt.annotate(str(len(arestasCortadas)), ptmed(
+                *arestas[i][0], *arestas[i][1]))
+            plt.savefig(f"plot/g{len(arestasCortadas)}.png")
+    # print(*cortadas[0], *cortadas[1])
+    pprint(len(cortadas))
+    for i in cortadas:
+        pprint(*i[0][0], *i[0][1])
+    # print(len(arestasCortadas))
+    # print(sum(somatorio))
     return sum(somatorio)
 
 
