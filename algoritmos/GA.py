@@ -4,7 +4,6 @@ import random
 
 import numpy
 
-from deap import algorithms
 from deap import base
 from deap import creator
 from deap import tools
@@ -18,12 +17,15 @@ from datetime import datetime
 
 
 @contextmanager
-def timeit():
+def timeit(arq=None):
     """Gerenciador de Contexto para verificar o tempo de execução."""
     start_time = datetime.now()
+    print(f'Tempo de Inicio (hh:mm:ss.ms) {start_time}', file=arq)
     yield
-    time_elapsed = datetime.now() - start_time
-    print(f'Tempo total (hh:mm:ss.ms) {time_elapsed}')
+    end_time = datetime.now()
+    time_elapsed = end_time - start_time
+    print(f'Tempo de Termino (hh:mm:ss.ms) {end_time}', file=arq)
+    print(f'Tempo Total (hh:mm:ss.ms) {time_elapsed}', file=arq)
 
 
 def dist2pt(x1, y1, x2, y2):
@@ -124,9 +126,9 @@ toolbox.register("map", map)
 # toolbox.register("map", pool.map)
 
 
-def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=300):
+def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=300, arq=None):
     """."""
-    pop = toolbox.population(n=1000)
+    pop = toolbox.population(n=pop)
 
     gen, genMelhor = 0, 0
 
@@ -148,7 +150,7 @@ def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=300):
     p = stats.compile(pop)
     logbook.record(gen=0, **p)
     logbook.header = "gen", 'min', 'max', "avg", "std"
-    print(logbook.stream)
+    print(logbook.stream, file=arq)
     while gen - genMelhor <= NGENSEMMELHORA:
         # Select the next generation individuals
         offspring = toolbox.select(pop, len(pop))
@@ -186,8 +188,10 @@ def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=300):
 
         p = stats.compile(pop)
         logbook.record(gen=gen, **p)
-        print(logbook.stream)
-
+        if gen - genMelhor <= NGENSEMMELHORA and gen != 1:
+            print(logbook.stream)
+        else:
+            print(logbook.stream, file=arq)
         hof.update(pop)
     # print(hof[0])
     # print([arestas[i] for i in hof[0]])
@@ -196,9 +200,28 @@ def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=300):
 
 if __name__ == "__main__":
     hof = None
-    ll = []
-    for i in range(10):
-        with timeit():
-            ll.append(main(NGENSEMMELHORA=10))
-    print([i[2][0].fitness.values for i in ll])
+    with open("../resultados/ga-resultados.txt", mode='w+') as arq:
+        print("Torneio:", file=arq)
+        print(file=arq)
+        for i in range(10):
+            print(f"Execução {i+1}:", file=arq)
+            print(file=arq)
+            iteracao = None
+            with timeit(arq=arq):
+                iteracao = main(NGENSEMMELHORA=50, arq=arq)
+            print("Individuo:", iteracao[2][0], file=arq)
+            print("Fitness: ", iteracao[2][0].fitness.values[0], file=arq)
+            print(file=arq)
+        toolbox.register("select", tools.selRoulette)
+        print("Roleta:", file=arq)
+        print(file=arq)
+        for i in range(10):
+            print(f"Execução {i+1}:", file=arq)
+            print(file=arq)
+            iteracao = None
+            with timeit(arq=arq):
+                iteracao = main(NGENSEMMELHORA=50, arq=arq)
+            print("Individuo:", iteracao[2][0], file=arq)
+            print("Fitness: ", iteracao[2][0].fitness.values[0], file=arq)
+            print(file=arq)
     # plotar(hof[0])
