@@ -1,9 +1,9 @@
 """."""
-from random import shuffle
+# from random import shuffle
 from pprint import pprint
-from shutil import rmtree
-from os import mkdir
-import matplotlib.pyplot as plt
+# from shutil import rmtree
+# from os import mkdir
+# import matplotlib.pyplot as plt
 print, pprint = pprint, print
 
 
@@ -54,45 +54,45 @@ def corta(g: dict, pi: (int or float), mi: (int or float)):
     arestas = [(i, j) for i in g.keys() for j in g[i]]
     arestasCortadas = []
     cortadas = []
-    cores = ['red', 'yellow']
-    shuffle(arestas)
-    rmtree('plot')
-    mkdir('plot')
-    plt.xlim(0, 40)
-    plt.ylim(0, 40)
+    # cores = ['red', 'yellow']
+    # shuffle(arestas)
+    # rmtree('plot')
+    # mkdir('plot')
+    # plt.xlim(0, 40)
+    # plt.ylim(0, 40)
     for i in range(len(arestas)):
         if not(arestas[i] in arestasCortadas or (arestas[i][1], arestas[i][0]) in arestasCortadas):
-            x, y = [], []
-            x1, y1 = [], []
+            # x, y = [], []
+            # x1, y1 = [], []
             cortadas.append([arestas[i]])
             if i == 0:
-                somatorio.append((g[arestas[i][0]][arestas[i][1]])/pi)
+                # somatorio.append((g[arestas[i][0]][arestas[i][1]])/pi)
                 cortadas[-1].append((g[arestas[i][0]][arestas[i][1]])/pi)
             else:
                 if arestas[i-1][1] == arestas[i][0]:
-                    somatorio.append((g[arestas[i][0]][arestas[i][1]])/pi)
+                    # somatorio.append((g[arestas[i][0]][arestas[i][1]])/pi)
                     cortadas[-1].append((g[arestas[i][0]][arestas[i][1]])/pi)
                 else:
-                    somatorio.append(
-                        (dist2pt(*arestas[i-1][1], *arestas[i][0]))/mi +
-                        (g[arestas[i][0]][arestas[i][1]])/pi)
-                    x1.append(arestas[i-1][1][0])
-                    y1.append(arestas[i-1][1][1])
-                    x1.append(arestas[i][0][0])
-                    y1.append(arestas[i][0][1])
-                    plt.plot(x1, y1, '-*', color=cores[1])
+                    # somatorio.append(
+                    #     (dist2pt(*arestas[i-1][1], *arestas[i][0]))/mi +
+                    #     (g[arestas[i][0]][arestas[i][1]])/pi)
+                    # x1.append(arestas[i-1][1][0])
+                    # y1.append(arestas[i-1][1][1])
+                    # x1.append(arestas[i][0][0])
+                    # y1.append(arestas[i][0][1])
+                    # plt.plot(x1, y1, '-*', color=cores[1])
                     cortadas[-1].append(
                         (dist2pt(*arestas[i-1][1], *arestas[i][0]))/mi)
                     cortadas[-1].append((g[arestas[i][0]][arestas[i][1]])/pi)
-            x.append(arestas[i][0][0])
-            y.append(arestas[i][0][1])
-            x.append(arestas[i][1][0])
-            y.append(arestas[i][1][1])
+            # x.append(arestas[i][0][0])
+            # y.append(arestas[i][0][1])
+            # x.append(arestas[i][1][0])
+            # y.append(arestas[i][1][1])
             arestasCortadas.append(arestas[i])
-            plt.plot(x, y, '-*', color=cores[0])
-            plt.annotate(str(len(arestasCortadas)), ptmed(
-                *arestas[i][0], *arestas[i][1]))
-            plt.savefig(f"plot/g{len(arestasCortadas)}.png")
+            # plt.plot(x, y, '-*', color=cores[0])
+            # plt.annotate(str(len(arestasCortadas)), ptmed(
+            #     *arestas[i][0], *arestas[i][1]))
+            # plt.savefig(f"plot/g{len(arestasCortadas)}.png")
     # print(*cortadas[0], *cortadas[1])
     pprint(len(cortadas))
     for i in cortadas:

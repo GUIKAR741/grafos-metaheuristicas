@@ -53,7 +53,16 @@ def plotar(individuo):
         #     0, 0, *arestas[individuo[0]][0]))
         # deslocamento += 1
         plt.plot(x1, y1, '-*', color=cores[1])
-    for i in range(len(individuo)):
+    i1 = individuo[0]
+    x.append(arestas[i1][0][0])
+    y.append(arestas[i1][0][1])
+    x.append(arestas[i1][1][0])
+    y.append(arestas[i1][1][1])
+    plt.plot(x, y, '-*', color=cores[0])
+    plt.annotate(str(corteA), ptmed(
+        *arestas[i1][0], *arestas[i1][1]))
+    corteA += 1
+    for i in range(len(individuo)-1):
         i1 = individuo[i]
         i2 = individuo[i+1 if i+1 < len(individuo) else 0]
         x1, y1, x, y = [], [], [], []
@@ -72,7 +81,7 @@ def plotar(individuo):
         x.append(arestas[i2][1][0])
         y.append(arestas[i2][1][1])
         plt.annotate(str(corteA), ptmed(
-            *arestas[individuo[i2]][0], *arestas[individuo[i2]][1]))
+            *arestas[i2][0], *arestas[i2][1]))
         corteA += 1
         plt.plot(x, y, '-*', color=cores[0])
     plt.show()
@@ -104,7 +113,9 @@ def evalCorte(individuo, pi=1, mi=5):
     dist = 0
     if arestas[individuo[0]][0] != (0.0, 0.0):
         dist += dist2pt(0.0, 0.0, *arestas[individuo[0]][0])
-    for i in range(len(individuo)):
+    i1 = individuo[0]
+    dist += (dist2pt(*arestas[i1][0], *arestas[i1][1]))/pi
+    for i in range(len(individuo)-1):
         i1 = individuo[i]
         i2 = individuo[i+1 if i+1 < len(individuo) else 0]
         if arestas[i1][1] == arestas[i2][0]:
@@ -200,28 +211,30 @@ def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=300, arq=None):
 
 if __name__ == "__main__":
     hof = None
+    qtd = 1
     with open("../resultados/ga-resultados.txt", mode='w+') as arq:
         print("Torneio:", file=arq)
         print(file=arq)
-        for i in range(10):
+        for i in range(qtd):
             print(f"Execução {i+1}:", file=arq)
             print(file=arq)
             iteracao = None
             with timeit(arq=arq):
-                iteracao = main(NGENSEMMELHORA=50, arq=arq)
+                iteracao = main(pop=1000, arq=arq)
             print("Individuo:", iteracao[2][0], file=arq)
             print("Fitness: ", iteracao[2][0].fitness.values[0], file=arq)
             print(file=arq)
         toolbox.register("select", tools.selRoulette)
-        print("Roleta:", file=arq)
-        print(file=arq)
-        for i in range(10):
-            print(f"Execução {i+1}:", file=arq)
-            print(file=arq)
-            iteracao = None
-            with timeit(arq=arq):
-                iteracao = main(NGENSEMMELHORA=50, arq=arq)
-            print("Individuo:", iteracao[2][0], file=arq)
-            print("Fitness: ", iteracao[2][0].fitness.values[0], file=arq)
-            print(file=arq)
-    # plotar(hof[0])
+        plotar(iteracao[2][0])
+        # print("Roleta:", file=arq)
+        # print(file=arq)
+        # for i in range(qtd):
+        #     print(f"Execução {i+1}:", file=arq)
+        #     print(file=arq)
+        #     iteracao = None
+        #     with timeit(arq=arq):
+        #         iteracao = main(pop=1000, arq=arq)
+        #     print("Individuo:", iteracao[2][0], file=arq)
+        #     print("Fitness: ", iteracao[2][0].fitness.values[0], file=arq)
+        #     print(file=arq)
+        # plotar(iteracao[2][0])

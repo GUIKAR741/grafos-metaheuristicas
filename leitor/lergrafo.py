@@ -1,11 +1,15 @@
-"""."""
+"""Lê o svg e retorna o grafo."""
 from bs4 import BeautifulSoup as bs
-import matplotlib.pyplot as plt
 
 
 def dist(x1, x2):
     """."""
     return ((x1-x2)**2)**(1/2)
+
+
+def dist2pt(x1, y1, x2, y2):
+    """."""
+    return ((x1-x2)**2+(y1-y2)**2)**(1/2)
 
 ent = ''
 while True:
@@ -14,28 +18,24 @@ while True:
     except EOFError:
         break
 parse = bs(ent, 'lxml')
-pontos = []
-vertices = set()
-par = []
+pontos = {}
+l = []
 for i in parse.find_all('polygon'):
     if not ('str0' in i.get('class')):
-        par.append([[], []])
+        lvez = []
         for k in list(map(lambda x: x.split(','), i.get('points').split())):
-            par[-1][0].append(float(k[0]))
-            par[-1][1].append(float(k[1]))
-        for j in list(map(lambda x: x.split(','), i.get('points').split())):
-            conv = []
-            x1, y1 = list(map(float, j))
-            for k in j:
-                conv.append(float(k))
-                vertices.add(float(k))
-            pontos.append(conv)
-print(len(vertices), len(pontos))
-for i in pontos:
-    print("%d %d %.2lf" % (*i, dist(*i)))
-for i in par:
-    i[0].append(i[0][0])
-    i[1].append(i[1][0])
-    plt.plot(i[0], i[1])
-plt.grid(True)
-plt.show()
+            x1, y1 = list(map(float, k))
+            if not ((x1, y1) in pontos.keys()):
+                pontos[(x1, y1)] = {}
+            lvez.append((x1, y1))
+        for j in range(len(lvez)):
+            if lvez[(j-1)] != lvez[j]:
+                pontos[lvez[j]][lvez[j-1]] = dist2pt(*lvez[j], *lvez[j-1])
+            if lvez[0 if j+1 >= len(lvez) else j+1] != lvez[j]:
+                pontos[lvez[j]][lvez[0 if j+1 >= len(lvez) else j+1]] = dist2pt(
+                    *lvez[j], *lvez[0 if j+1 >= len(lvez) else j+1])
+print(len(pontos.keys()), sum([len(i) for i in pontos.values()]))
+arr = set()
+for i, j in pontos.items():
+    for k, l in j.items():
+        print(*i, *k, ("%.2lf" % l))
