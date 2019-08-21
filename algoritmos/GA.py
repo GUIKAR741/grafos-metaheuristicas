@@ -30,12 +30,12 @@ def timeit(arq=None):
 
 def dist2pt(x1, y1, x2, y2):
     """."""
-    return ((x1-x2)**2+(y1-y2)**2)**(1/2)
+    return ((x1 - x2)**2 + (y1 - y2)**2)**(1 / 2)
 
 
 def ptmed(x1, y1, x2, y2):
     """."""
-    return (x1+x2)/2, (y1+y2)/2
+    return (x1 + x2) / 2, (y1 + y2) / 2
 
 
 def plotar(individuo):
@@ -43,7 +43,6 @@ def plotar(individuo):
     x1, y1, x, y = [], [], [], []
     cores = ['red', 'yellow']
     corteA = 1
-    deslocamento = 1
     if arestas[individuo[0]][0] != (0.0, 0.0):
         x1.append(0.0)
         y1.append(0.0)
@@ -62,9 +61,9 @@ def plotar(individuo):
     plt.annotate(str(corteA), ptmed(
         *arestas[i1][0], *arestas[i1][1]))
     corteA += 1
-    for i in range(len(individuo)-1):
+    for i in range(len(individuo) - 1):
         i1 = individuo[i]
-        i2 = individuo[i+1 if i+1 < len(individuo) else 0]
+        i2 = individuo[i + 1 if i + 1 < len(individuo) else 0]
         x1, y1, x, y = [], [], [], []
         if arestas[i1][1] != arestas[i2][0]:
             x1.append(arestas[i1][1][0])
@@ -114,15 +113,15 @@ def evalCorte(individuo, pi=1, mi=5):
     if arestas[individuo[0]][0] != (0.0, 0.0):
         dist += dist2pt(0.0, 0.0, *arestas[individuo[0]][0])
     i1 = individuo[0]
-    dist += (dist2pt(*arestas[i1][0], *arestas[i1][1]))/pi
-    for i in range(len(individuo)-1):
+    dist += (dist2pt(*arestas[i1][0], *arestas[i1][1])) / pi
+    for i in range(len(individuo) - 1):
         i1 = individuo[i]
-        i2 = individuo[i+1 if i+1 < len(individuo) else 0]
+        i2 = individuo[i + 1 if i + 1 < len(individuo) else 0]
         if arestas[i1][1] == arestas[i2][0]:
-            dist += (dist2pt(*arestas[i2][0], *arestas[i2][1]))/pi
+            dist += (dist2pt(*arestas[i2][0], *arestas[i2][1])) / pi
         else:
-            dist += (dist2pt(*arestas[i1][1], *arestas[i2][0]))/mi + (
-                dist2pt(*arestas[i2][0], *arestas[i2][1]))/pi
+            dist += (dist2pt(*arestas[i1][1], *arestas[i2][0])) / mi + (
+                dist2pt(*arestas[i2][0], *arestas[i2][1])) / pi
     return dist,
 
 
@@ -137,7 +136,7 @@ toolbox.register("map", map)
 # toolbox.register("map", pool.map)
 
 
-def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=100, arq=None):
+def main(pop=1000, CXPB=0.7, MUTPB=0.3, NGENSEMMELHORA=500, arq=None):
     """."""
     pop = toolbox.population(n=pop)
 
@@ -212,7 +211,9 @@ def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=100, arq=None):
 if __name__ == "__main__":
     hof = None
     qtd = 1
-    with open("../resultados/ga-resultados.txt", mode='w+') as arq:
+    # with open("../resultados/ga-geozika.txt", mode='w+') as arq:
+    if True:
+        arq = None
         print("Torneio:", file=arq)
         print(file=arq)
         for i in range(qtd):
@@ -225,7 +226,7 @@ if __name__ == "__main__":
             print("Fitness: ", iteracao[2][0].fitness.values[0], file=arq)
             print(file=arq)
         toolbox.register("select", tools.selRoulette)
-        plotar(iteracao[2][0])
+        # plotar(iteracao[2][0])
         # print("Roleta:", file=arq)
         # print(file=arq)
         # for i in range(qtd):
