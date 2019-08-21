@@ -19,6 +19,5 @@ if __name__ == "__main__":
     ent = ler_grafo(ent, mostra=False)
     ent = ler(ent)
     ent = cortar(ent, mostra=False)
-    # print(ent)
     ent = ler(ent)
     partir(ent, mostra=True)

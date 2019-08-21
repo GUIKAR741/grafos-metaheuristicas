@@ -1,6 +1,4 @@
 """."""
-# from Geometry import Point, Line, Segment
-# from Geometry.exceptions import CollinearLines
 from sympy import Point, Segment
 from sympy.geometry import intersection
 from pprint import pprint
@@ -70,14 +68,14 @@ def partir(ent, mostra=True):
     for i in arestas_final:
         out += f'\n{i.p1.x} {i.p1.y} {i.p2.x} {i.p2.y}'
         if mostra:
-            print(i.p1.x, i.p1.y, i.p2.x, i.p2.y)
-    plt.xlim(-1, 40)
-    plt.ylim(-1, 40)
-    j = 1
-    for i in arestas_final:
-        plt.plot([i.p1.x, i.p2.x], [i.p1.y, i.p2.y])
-        plt.savefig(f'img/{j}.png')
-        j += 1
+            print(float(i.p1.x), float(i.p1.y), float(i.p2.x), float(i.p2.y))
+    # plt.xlim(-1000, 50000)
+    # plt.ylim(-1000, 50000)
+    # j = 1
+    # for i in arestas_final:
+    #     plt.plot([i.p1.x, i.p2.x], [i.p1.y, i.p2.y])
+    #     plt.savefig(f'img/{j}.png')
+    #     j += 1
     return out
 
 
