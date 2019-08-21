@@ -34,15 +34,15 @@ class Grafo:
 
 def dist2pt(x1, y1, x2, y2):
     """."""
-    return ((x1-x2)**2+(y1-y2)**2)**(1/2)
+    return ((x1 - x2)**2 + (y1 - y2)**2)**(1 / 2)
 
 
 def ptmed(x1, y1, x2, y2):
     """."""
-    return (x1+x2)/2, (y1+y2)/2
+    return (x1 + x2) / 2, (y1 + y2) / 2
 
 
-def corta(g: dict, pi: (int or float), mi: (int or float)):
+def corta(g: dict, pi: (int or float), mi: (int or float), mostra=True):
     """Corta as arestas do grafo.
 
     args:
@@ -50,7 +50,7 @@ def corta(g: dict, pi: (int or float), mi: (int or float)):
     pi -> velocidade do corte
     mi -> velocidade do deslocamento
     """
-    somatorio = []
+    # somatorio = []
     arestas = [(i, j) for i in g.keys() for j in g[i]]
     arestasCortadas = []
     cortadas = []
@@ -67,11 +67,11 @@ def corta(g: dict, pi: (int or float), mi: (int or float)):
             cortadas.append([arestas[i]])
             if i == 0:
                 # somatorio.append((g[arestas[i][0]][arestas[i][1]])/pi)
-                cortadas[-1].append((g[arestas[i][0]][arestas[i][1]])/pi)
+                cortadas[-1].append((g[arestas[i][0]][arestas[i][1]]) / pi)
             else:
-                if arestas[i-1][1] == arestas[i][0]:
+                if arestas[i - 1][1] == arestas[i][0]:
                     # somatorio.append((g[arestas[i][0]][arestas[i][1]])/pi)
-                    cortadas[-1].append((g[arestas[i][0]][arestas[i][1]])/pi)
+                    cortadas[-1].append((g[arestas[i][0]][arestas[i][1]]) / pi)
                 else:
                     # somatorio.append(
                     #     (dist2pt(*arestas[i-1][1], *arestas[i][0]))/mi +
@@ -82,8 +82,8 @@ def corta(g: dict, pi: (int or float), mi: (int or float)):
                     # y1.append(arestas[i][0][1])
                     # plt.plot(x1, y1, '-*', color=cores[1])
                     cortadas[-1].append(
-                        (dist2pt(*arestas[i-1][1], *arestas[i][0]))/mi)
-                    cortadas[-1].append((g[arestas[i][0]][arestas[i][1]])/pi)
+                        (dist2pt(*arestas[i - 1][1], *arestas[i][0])) / mi)
+                    cortadas[-1].append((g[arestas[i][0]][arestas[i][1]]) / pi)
             # x.append(arestas[i][0][0])
             # y.append(arestas[i][0][1])
             # x.append(arestas[i][1][0])
@@ -94,16 +94,34 @@ def corta(g: dict, pi: (int or float), mi: (int or float)):
             #     *arestas[i][0], *arestas[i][1]))
             # plt.savefig(f"plot/g{len(arestasCortadas)}.png")
     # print(*cortadas[0], *cortadas[1])
-    pprint(len(cortadas))
+    out = str(len(cortadas))
+    if mostra:
+        pprint(len(cortadas))
     for i in cortadas:
-        pprint(*i[0][0], *i[0][1])
+        if mostra:
+            pprint(*i[0][0], *i[0][1])
+        out += f'\n{i[0][0][0]} {i[0][0][1]} {i[0][1][0]} {i[0][1][1]}'
+    # pprint(out)
     # print(len(arestasCortadas))
     # print(sum(somatorio))
-    return sum(somatorio)
+    return out
+    # return sum(somatorio)
 
 
-g = Grafo(*[int(i) for i in input().split()])
-for i in range(g.e):
-    ent = [float(j) for j in input().split()]
-    g.addAresta((ent[0], ent[1]), (ent[2], ent[3]), ent[4])
-corta(g.g, 1, 5)
+def cortar(ent, mostra=True):
+    """."""
+    # print(ent)
+    g = Grafo(*ent[0])
+    for i in range(1, int(g.e)):
+        ent2 = [float(j) for j in ent[i]]
+        g.addAresta((ent2[0], ent2[1]), (ent2[2], ent2[3]), ent2[4])
+    return corta(g.g, 1, 5, mostra)
+
+if __name__ == "__main__":
+    ent = [[int(i) for i in input().split()]]
+    while True:
+        try:
+            ent.append([float(i) for i in input().split()])
+        except EOFError:
+            break
+    cortar(ent)

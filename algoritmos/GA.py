@@ -137,7 +137,7 @@ toolbox.register("map", map)
 # toolbox.register("map", pool.map)
 
 
-def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=300, arq=None):
+def main(pop=500, CXPB=0.7, MUTPB=0.2, NGENSEMMELHORA=100, arq=None):
     """."""
     pop = toolbox.population(n=pop)
 
