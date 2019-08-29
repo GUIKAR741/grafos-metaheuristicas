@@ -34,7 +34,7 @@ def partir(ent, mostra=True):
         add_final = True
         while j < len(arestas_teste):
             l2 = arestas_teste[j]
-            if l1.contains(l2) or l2.contains(l1):
+            if l1.contains(l2):
                 ordenado = separaArestas(*sorted([l1.p1, l1.p2, l2.p1, l2.p2],
                                                  key=lambda a: (a.x, a.y)))
                 [arestas_teste.append(k) for k in ordenado]
@@ -69,13 +69,24 @@ def partir(ent, mostra=True):
         out += f'\n{i.p1.x} {i.p1.y} {i.p2.x} {i.p2.y}'
         if mostra:
             print(float(i.p1.x), float(i.p1.y), float(i.p2.x), float(i.p2.y))
-    # plt.xlim(-1000, 50000)
-    # plt.ylim(-1000, 50000)
-    # j = 1
+    # X = []
+    # Y = []
     # for i in arestas_final:
-    #     plt.plot([i.p1.x, i.p2.x], [i.p1.y, i.p2.y])
-    #     plt.savefig(f'img/{j}.png')
-    #     j += 1
+    #     X.append(i.p1.x)
+    #     X.append(i.p2.x)
+    #     Y.append(i.p1.y)
+    #     Y.append(i.p2.y)
+    # minimoX = min(X)
+    # maximoX = max(X)
+    # minimoY = min(Y)
+    # maximoY = max(Y)
+    plt.xlim(-10, 100)
+    plt.ylim(-10, 100)
+    j = 1
+    for i in arestas_final:
+        plt.plot([i.p1.x, i.p2.x], [i.p1.y, i.p2.y])
+        plt.savefig(f'img/g{j}.png')
+        j += 1
     return out
 
 
@@ -87,14 +98,3 @@ if __name__ == "__main__":
         except EOFError:
             break
     partir(ent)
-
-    # print(sorted([Point(1, 1), Point(6, 1), Point(4, 1), Point(8, 5)], key=lambda a: (a.x, a.y)))
-    # print(Line(Point(1, 1), Point(6, 1)).isCollinear(Line(Point(6, 1), Point(6, 5))))
-    # try:
-    #     print(Line(Point(1, 1), Point(6, 1)).intersection(Line(Point(6, 1), Point(6, 5))))
-    # except:
-    #     ..
-    # print(Segment(Point(4, 2), Point(8, 2)).contains(Segment(Point(5, 2), Point(5, 7))))
-    # print(Segment(Point(4, 2), Point(8, 2)).p1.x)
-    # print(Segment(Point(4, 2), Point(8, 2)).p1.y)
-    # print(intersection(Segment(Point(4, 2), Point(8, 2)), Segment(Point(5, 2), Point(8, 2))))
