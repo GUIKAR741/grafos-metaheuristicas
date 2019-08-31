@@ -80,13 +80,13 @@ def partir(ent, mostra=True):
     # maximoX = max(X)
     # minimoY = min(Y)
     # maximoY = max(Y)
-    plt.xlim(-10, 100)
-    plt.ylim(-10, 100)
-    j = 1
-    for i in arestas_final:
-        plt.plot([i.p1.x, i.p2.x], [i.p1.y, i.p2.y])
-        plt.savefig(f'img/g{j}.png')
-        j += 1
+    # plt.xlim(-10, 100)
+    # plt.ylim(-10, 100)
+    # j = 1
+    # for i in arestas_final:
+    #     plt.plot([i.p1.x, i.p2.x], [i.p1.y, i.p2.y])
+    #     plt.savefig(f'img/g{j}.png')
+    #     j += 1
     return out
 
 

@@ -1,0 +1,62 @@
+Torneio:
+
+Execução 1:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-08-29 20:18:34.590027
+gen	min	max    	avg    	std    
+0  	35 	49,8528	44,2659	2,91882
+1  	35,1088	49,6038	42,3665	2,88205
+106	32,6   	47,0844	32,8898	1,4321 
+Tempo de Termino (hh:mm:ss.ms) 2019-08-29 20:19:09.278294
+Tempo Total (hh:mm:ss.ms) 0:00:34.688267
+Individuo: [[0, 7, 3, 2, 1, 6, 5, 4], [0, 0, 0, 1, 1, 0, 0, 1]]
+Fitness:  32.6
+
+Execução 2:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-08-29 20:19:09.451372
+gen	min 	max   	avg    	std    
+0  	34,8	50,295	44,3091	2,98333
+1  	34,8	49,5616	42,286 	2,96688
+110	32,6	46,9088	32,8223	1,31378
+Tempo de Termino (hh:mm:ss.ms) 2019-08-29 20:19:43.103646
+Tempo Total (hh:mm:ss.ms) 0:00:33.652274
+Individuo: [[0, 7, 4, 5, 6, 1, 2, 3], [0, 0, 0, 1, 1, 0, 0, 1]]
+Fitness:  32.6
+
+Execução 3:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-08-29 20:19:43.282009
+gen	min 	max   	avg    	std    
+0  	34,4	50,295	44,3294	2,93872
+1  	34,4	49,5862	42,3965	2,94118
+111	32,6	46,9088	32,8006	1,24117
+Tempo de Termino (hh:mm:ss.ms) 2019-08-29 20:20:20.204378
+Tempo Total (hh:mm:ss.ms) 0:00:36.922369
+Individuo: [[1, 2, 3, 4, 5, 6, 0, 7], [0, 0, 1, 0, 1, 1, 0, 0]]
+Fitness:  32.6
+
+Execução 4:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-08-29 20:20:20.407183
+gen	min 	max    	avg    	std    
+0  	35,8	50,5372	44,2999	2,93749
+1  	35,1088	50,095 	42,4199	2,92103
+109	32,8   	46,4   	33,0831	1,49877
+Tempo de Termino (hh:mm:ss.ms) 2019-08-29 20:20:56.527933
+Tempo Total (hh:mm:ss.ms) 0:00:36.120750
+Individuo: [[0, 6, 5, 4, 7, 1, 2, 3], [0, 0, 0, 1, 1, 0, 0, 1]]
+Fitness:  32.6
+
+Execução 5:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-08-29 20:20:56.714090
+gen	min 	max    	avg   	std   
+0  	35,2	50,5372	44,434	2,9083
+1  	35,2	49,6528	42,5456	2,95271
+108	32,6   	47,3088	32,7991	1,08799 
+Tempo de Termino (hh:mm:ss.ms) 2019-08-29 20:21:31.502283
+Tempo Total (hh:mm:ss.ms) 0:00:34.788193
+Individuo: [[0, 6, 5, 4, 7, 1, 2, 3], [0, 0, 0, 1, 1, 0, 0, 1]]
+Fitness:  32.6
+
