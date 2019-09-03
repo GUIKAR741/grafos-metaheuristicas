@@ -37,11 +37,12 @@ def midPoint(x1, y1, x2, y2):
 
 def plotar(individuo, f):
     """."""
-    fig1, f1_axes = plt.subplots(ncols=1, nrows=1, constrained_layout=True)
+    fig1, f1_axes = plt.subplots(ncols=2, nrows=1, constrained_layout=True)
+    # fig1.figure(figsize=(15, 15))
+    fig1.set_size_inches((20, 15))
     x1, y1, x, y = [], [], [], []
     colors = ['red', 'yellow']
     cutA = 1
-    f1_axes = [f1_axes]
     i1 = individuo[0][0]
     a1 = edges[i1] if individuo[1][0] == 0 else edges[i1][::-1]
     if a1[0] != (0.0, 0.0):
@@ -52,9 +53,9 @@ def plotar(individuo, f):
         # plt.annotate("Des-"+str(deslocamento), midPoint(
         #     0, 0, *edges[individuo[0]][0]))
         # deslocamento += 1
-        f1_axes[0].plot(x1, y1, '-*', color=colors[1])
-        # f1_axes[0].annotate(str(cutA), midPoint(0,0, a1[0][0], a1[0][1]))
-        # cutA += 1
+        f1_axes[1].plot(x1, y1, '-', color=colors[1])
+        f1_axes[1].annotate(str(cutA), midPoint(0, 0, a1[0][0], a1[0][1]))
+        cutA += 1
         # plt.plot(x1, y1, '-*', color=colors[1])
     x.append(a1[0][0])
     y.append(a1[0][1])
@@ -63,7 +64,7 @@ def plotar(individuo, f):
     # plt.plot(x, y, '-*', color=colors[0])
     # plt.annotate(str(cutA), midPoint(
     #     *a1[0], *a1[1]))
-    f1_axes[0].plot(x, y, '-*', color=colors[0])
+    f1_axes[0].plot(x, y, '-', color=colors[0])
     f1_axes[0].annotate(str(cutA), midPoint(*a1[0], *a1[1]))
     cutA += 1
     for i in range(len(individuo[0]) - 1):
@@ -83,9 +84,9 @@ def plotar(individuo, f):
             #     *edges[i1][1], *edges[i2][0]))
             # deslocamento += 1
             # plt.plot(x1, y1, '-*', color=colors[1])
-            f1_axes[0].plot(x1, y1, '-*', color=colors[1])
-            # f1_axes[0].annotate(str(cutA), midPoint(*a1[1], *a2[0]))
-            # cutA += 1
+            f1_axes[1].plot(x1, y1, '-', color=colors[1])
+            f1_axes[1].annotate(str(cutA), midPoint(*a1[1], *a2[0]))
+            cutA += 1
         x.append(a2[0][0])
         y.append(a2[0][1])
         x.append(a2[1][0])
@@ -95,12 +96,12 @@ def plotar(individuo, f):
         # plt.plot(x, y, '-*', color=colors[0])
         f1_axes[0].annotate(str(cutA), midPoint(
             *a2[0], *a2[1]))
-        f1_axes[0].plot(x, y, '-*', color=colors[0])
+        f1_axes[0].plot(x, y, '-', color=colors[0])
         cutA += 1
-    # f1_axes[0].set_xlim(*f1_axes[0].get_xlim())
-    # f1_axes[0].set_ylim(*f1_axes[0].get_ylim())
+    f1_axes[1].set_xlim(*f1_axes[0].get_xlim())
+    f1_axes[1].set_ylim(*f1_axes[0].get_ylim())
     # plt.show()
-    plt.savefig(f'../resultados/final/{f}.png')
+    fig1.savefig(f'../resultados/final/{f}.png')
     # plt.close()
 
 
@@ -230,18 +231,27 @@ def main(pop=3000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=100, file=None):
 
 
 files = [
+    'instance_01_2pol',
+    'instance_01_4pol',
+    'instance_01_6pol',
+    'instance_01_8pol',
     # 'g3',
     # 'geo1',
     # 'g2',
     # 'geo3',
     # 'geozika',
+    # 'FU',
     # 'rco1',
+    # 'TROUSERS',
+    # 'DIGHE1',
+    # 'DIGHE2',
+    # 'teste1',
     # 'g1',
     # 'blaz1',
     # 'rco2',
     # 'blaz2',
-    'rco3',
-    'blaz3'
+    # 'rco3',
+    # 'blaz3'
 ]
 # toolbox of GA
 toolbox = base.Toolbox()
@@ -285,9 +295,9 @@ if __name__ == "__main__":
         #         a = [float(j) for j in input().split()]
         #         edges.append([(a[0], a[1]), (a[2], a[3])])
         hof = None
-        qtd = 5
+        qtd = 10
         # if True:
-        # file_write = None
+        #     file_write = None
         with open(f"../resultados/ga-{f}.txt", mode='w+') as file_write:
             print("Torneio:", file=file_write)
             print(file=file_write)

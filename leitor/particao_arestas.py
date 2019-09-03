@@ -62,13 +62,21 @@ def partir(ent, mostra=True):
             arestas_final.append(l1)
         arestas_teste.pop(0)
         i = 0
+    set_arestas_final = set()
+    for i in arestas_final:
+        if not((i.p1.x, i.p1.y, i.p2.x, i.p2.y) in set_arestas_final or
+               (i.p2.x, i.p2.y, i.p1.x, i.p1.y) in set_arestas_final):
+            set_arestas_final.add((float(i.p1.x), float(
+                i.p1.y), float(i.p2.x), float(i.p2.y)))
+    arestas_final = set_arestas_final
     out = str(len(arestas_final))
     if mostra:
         print(len(arestas_final))
     for i in arestas_final:
-        out += f'\n{i.p1.x} {i.p1.y} {i.p2.x} {i.p2.y}'
+        out += f'\n{i[0]} {i[1]} {i[2]} {i[3]}'
         if mostra:
-            print(float(i.p1.x), float(i.p1.y), float(i.p2.x), float(i.p2.y))
+            print(*i)
+            # print(float(i.p1.x), float(i.p1.y), float(i.p2.x), float(i.p2.y))
     # X = []
     # Y = []
     # for i in arestas_final:
