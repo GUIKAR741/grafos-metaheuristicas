@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 from contextlib import contextmanager
 from datetime import datetime
 
+from math import ceil
+
 
 @contextmanager
 def timeit(file_write=None):
@@ -37,6 +39,7 @@ def midPoint(x1, y1, x2, y2):
 
 def plotar(individuo, f):
     """."""
+    individuo = decode(individuo)
     fig1, f1_axes = plt.subplots(ncols=2, nrows=1, constrained_layout=True)
     # fig1.figure(figsize=(15, 15))
     fig1.set_size_inches((20, 15))
@@ -101,7 +104,7 @@ def plotar(individuo, f):
     f1_axes[1].set_xlim(*f1_axes[0].get_xlim())
     f1_axes[1].set_ylim(*f1_axes[0].get_ylim())
     # plt.show()
-    fig1.savefig(f'../resultados/ga/plot/{f}.png')
+    fig1.savefig(f'../resultados/brkga/plot/{f}.png')
     # plt.close()
 
 
@@ -121,6 +124,26 @@ def genIndividuo(edges):
     return random.sample(range(len(edges)), len(edges)), v
 
 
+def genIndividuoRK(edges):
+    """
+    Generate Individuo.
+
+    args:
+        edges -> edges to cut of grapth
+
+    individuo[0]: order of edges
+    individuo[1]: order of cut
+
+    """
+    return [random.random() for i in range(len(edges))], [
+        random.random() for i in range(len(edges))]
+
+
+def decode(ind):
+    """."""
+    return [ind[0].index(i) for i in sorted(ind[0])], [0 if i < 0.5 else 1 for i in ind[1]]
+
+
 def evalCut(individuo, pi=1, mi=5):
     """
     Eval Edges Cut.
@@ -133,18 +156,19 @@ def evalCut(individuo, pi=1, mi=5):
     else the cut is in reverse edge order
 
     """
+    ind = decode(individuo)
     dist = 0
-    i1 = individuo[0][0]
-    a1 = edges[i1] if individuo[1][0] == 0 else edges[i1][::-1]
+    i1 = ind[0][0]
+    a1 = edges[i1] if ind[1][0] == 0 else edges[i1][::-1]
     if a1 != (0.0, 0.0):
         dist += dist2pt(0.0, 0.0, *a1[0])
     dist += (dist2pt(*a1[0], *a1[1])) / pi
-    for i in range(len(individuo[0]) - 1):
-        i1 = individuo[0][i]
-        i2 = individuo[0][i + 1 if i + 1 < len(individuo[0]) else 0]
-        a1 = edges[i1] if individuo[1][i] == 0 else edges[i1][::-1]
-        a2 = edges[i2] if individuo[1][i + 1 if i + 1 <
-                                       len(individuo[0]) else 0] == 0 else edges[i2][::-1]
+    for i in range(len(ind[0]) - 1):
+        i1 = ind[0][i]
+        i2 = ind[0][i + 1 if i + 1 < len(ind[0]) else 0]
+        a1 = edges[i1] if ind[1][i] == 0 else edges[i1][::-1]
+        a2 = edges[i2] if ind[1][i + 1 if i + 1 <
+                                 len(ind[0]) else 0] == 0 else edges[i2][::-1]
         if a1[1] == a2[0]:
             dist += (dist2pt(*a2[0], *a2[1])) / pi
         else:
@@ -154,19 +178,26 @@ def evalCut(individuo, pi=1, mi=5):
     return dist,
 
 
-def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=300, file=None):
+def main(P=10000, Pe=0.2, Pm=0.3, pe=0.7, NumGenWithoutConverge=300, file=None):
     """
     Execute Genetic Algorithm.
 
     args:
-        pop -> population of GA
-        CXPB -> Crossover Probability
-        MUTPB -> MUTATION Probability
+        P -> size of population
+        Pe -> size of elite population
+        Pm -> size of mutant population
+        Pe -> elite allele inheritance probability
         NumGenWithoutConverge -> Number of generations without converge
         file -> if write results in file
 
     """
-    pop = toolbox.population(n=pop)
+    pop = toolbox.population(n=P)
+
+    toolbox.register("mate", crossBRKGA, indpb=pe)
+
+    tamElite = ceil(P * Pe)
+    tamMutant = ceil(P * Pm)
+    tamCrossover = P - tamElite - tamMutant
 
     gen, genMelhor = 0, 0
 
@@ -180,7 +211,9 @@ def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=300, file=None):
 
     # Evaluate the entire population
     list(toolbox.map(toolbox.evaluate, pop))
-    melhor = min([i.fitness.values for i in pop])
+    # for i in pop:
+    #     toolbox.evaluate(i)
+    melhor = numpy.min([i.fitness.values for i in pop])
     logbook = tools.Logbook()
     p = stats.compile(pop)
     logbook.record(gen=0, **p)
@@ -188,35 +221,45 @@ def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=300, file=None):
     print(logbook.stream, file=file)
     while gen - genMelhor <= NumGenWithoutConverge:
         # Select the next generation individuals
-        offspring = toolbox.select(pop, len(pop))
-        # Clone the selected individuals
-        offspring = list(toolbox.map(toolbox.clone, offspring))
+        offspring = sorted(
+            list(toolbox.map(toolbox.clone, pop)),
+            key=lambda x: x.fitness,
+            reverse=True
+        )
+        elite = offspring[:tamElite]
+        cross = offspring[tamElite:tamCrossover]
+        c = []
         # Apply crossover and mutation on the offspring
-        for child1, child2 in zip(offspring[::2], offspring[1::2]):
-            if random.random() < CXPB:
-                toolbox.mate0(child1[0], child2[0])
-                toolbox.mate1(child1[1], child2[1])
-                del child1.fitness.values
-                del child2.fitness.values
+        for i in range(tamCrossover):
+            e1 = random.choice(elite)
+            c1 = random.choice(cross)
+            ni = creator.Individual([[], []])
+            ni[0] = toolbox.mate(e1[0], c1[0])
+            ni[1] = toolbox.mate(e1[1], c1[1])
+            c.append(ni)
 
-        for mutant in offspring:
-            if random.random() < MUTPB:
-                toolbox.mutate0(mutant[0])
-                toolbox.mutate1(mutant[1])
-                del mutant.fitness.values
+        p = toolbox.population(n=tamMutant)
+        c = elite + c + p
+        offspring = c
 
         # Evaluate the individuals with an invalid fitness
-        invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
-        list(toolbox.map(toolbox.evaluate, invalid_ind))
+
+        # invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+        # list(toolbox.map(toolbox.evaluate, invalid_ind))
+
+        list(toolbox.map(toolbox.evaluate, offspring[tamElite:]))
 
         # The population is entirely replaced by the offspring
         pop[:] = offspring
 
         gen += 1
-        minF = min([i.fitness.values for i in pop])
-        if minF < melhor:
-            melhor = minF
-            genMelhor = gen
+        minf = numpy.min([i.fitness.values for i in pop])
+        try:
+            if minf < melhor:
+                melhor = minf
+                genMelhor = gen
+        except:
+            print(minf)
 
         p = stats.compile(pop)
         logbook.record(gen=gen, **p)
@@ -225,7 +268,14 @@ def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=300, file=None):
         else:
             print(logbook.stream, file=file)
         hof.update(pop)
+
     return pop, stats, hof
+
+
+def crossBRKGA(ind1, ind2, indpb):
+    """."""
+    return [ind1[i] if random.random() < indpb else ind2[i]
+            for i in range(min(len(ind1), len(ind2)))]
 
 
 files = [
@@ -239,12 +289,12 @@ files = [
     # 'instance_01_9pol',
     # 'instance_01_10pol',
 
-    # 'rinstance_01_2pol',
-    # 'rinstance_01_3pol',
-    # 'rinstance_01_4pol',
-    # 'rinstance_01_5pol',
-    # 'rinstance_01_6pol',
-    # 'rinstance_01_7pol',
+    'rinstance_01_2pol',
+    'rinstance_01_3pol',
+    'rinstance_01_4pol',
+    'rinstance_01_5pol',
+    'rinstance_01_6pol',
+    'rinstance_01_7pol',
     'rinstance_01_8pol',
     'rinstance_01_9pol',
     'rinstance_01_10pol',
@@ -293,37 +343,23 @@ if True:
                 a = [float(j) for j in file[i].split()]
                 edges.append([(a[0], a[1]), (a[2], a[3])])
         # Generate Individual
-        toolbox.register("indices", genIndividuo, edges)
+        toolbox.register("indices", genIndividuoRK, edges)
         # initializ individual
         toolbox.register("individual", tools.initIterate,
                          creator.Individual, toolbox.indices)
         # Generate Population
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-        # Selection
-        toolbox.register("select", tools.selTournament, tournsize=3)
-        # Crossover
-        toolbox.register("mate0", tools.cxPartialyMatched)
-        toolbox.register("mate1", tools.cxTwoPoint)
-        # Mutate
-        toolbox.register("mutate0", tools.mutShuffleIndexes, indpb=0.05)
-        toolbox.register("mutate1", tools.mutFlipBit, indpb=0.05)
-        # toolbox.register("mutate0", tools.mutShuffleIndexes, indpb=0.05)
-        # toolbox.register("mutate1", tools.mutFlipBit, indpb=0.05)
         # Objective Function
         toolbox.register("evaluate", evalCut)
         # function to execute map
         toolbox.register("map", map)
-        #     n = int(input())
-        #     edges = []
-        #     for i in range(n):
-        #         a = [float(j) for j in input().split()]
-        #         edges.append([(a[0], a[1]), (a[2], a[3])])
+
         hof = None
         qtd = 10
         # if True:
         #     file_write = None
-        with open(f"../resultados/ga/{f}.txt", mode='w+') as file_write:
-            print("GA:", file=file_write)
+        with open(f"../resultados/brkga/{f}.txt", mode='w+') as file_write:
+            print("BRKGA:", file=file_write)
             print(file=file_write)
             for i in range(qtd):
                 print(f"Execução {i+1}:", file=file_write)
@@ -331,7 +367,7 @@ if True:
                 iteracao = None
                 with timeit(file_write=file_write):
                     iteracao = main(file=file_write)
-                print("Individuo:", iteracao[2][0], file=file_write)
+                print("Individuo:", decode(iteracao[2][0]), file=file_write)
                 print("Fitness: ", iteracao[2][0].fitness.values[0], file=file_write)
                 print(file=file_write)
-                plotar(iteracao[2][0], f + '-' + str(i + 1))
+                plotar(iteracao[2][0], f + '-b-' + str(i + 1))

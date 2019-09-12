@@ -1,0 +1,122 @@
+GA:
+
+Execução 1:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 22:31:46.410451
+gen	min    	max    	avg    	std    
+0  	594.142	878.798	782.851	52.6232
+1  	588.284	878.798	749.044	59.1418
+304	560    	849.301	563.761	21.9635
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 22:36:33.148757
+Tempo Total (hh:mm:ss.ms) 0:04:46.738306
+Individuo: [[6, 4, 5, 0, 2, 3, 1, 7], [0, 0, 0, 1, 0, 0, 1, 1]]
+Fitness:  560.0
+
+Execução 2:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 22:36:35.691848
+gen	min	max    	avg    	std    
+0  	600	875,169	782,388	52,8517
+1  	580	867,175	748,577	59,5337
+304	560	871,662	564,051	22,9887
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 22:41:26.460394
+Tempo Total (hh:mm:ss.ms) 0:04:50.768546
+Individuo: [[7, 1, 3, 2, 0, 5, 4, 6], [0, 0, 1, 1, 0, 1, 1, 1]]
+Fitness:  560.0
+
+Execução 3:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 22:41:27.207550
+gen	min    	max    	avg    	std    
+0  	574,142	876,503	782,196	52,4231
+1  	574,142	874,524	749,04 	59,2866
+304	560    	841,848	563,847	21,961 
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 22:46:21.753349
+Tempo Total (hh:mm:ss.ms) 0:04:54.545799
+Individuo: [[7, 1, 3, 2, 4, 5, 0, 6], [0, 0, 1, 0, 0, 0, 1, 1]]
+Fitness:  560.0
+
+Execução 4:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 22:46:22.485938
+gen	min	max    	avg    	std    
+0  	590	880,132	782,895	52,1104
+1  	590	879,088	749,106	58,47  
+306	560    	861,848	563,991	22,4701
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 22:51:14.912984
+Tempo Total (hh:mm:ss.ms) 0:04:52.427046
+Individuo: [[6, 2, 0, 5, 4, 3, 1, 7], [0, 1, 0, 1, 1, 0, 1, 1]]
+Fitness:  560.0
+
+Execução 5:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 22:51:15.637507
+gen	min    	max    	avg    	std    
+0  	596,503	876,503	782,551	52,7953
+1  	580    	878,798	750,221	58,714 
+303	560    	852,651	563,797	21,7273
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 22:56:04.324456
+Tempo Total (hh:mm:ss.ms) 0:04:48.686949
+Individuo: [[6, 4, 5, 0, 2, 3, 1, 7], [0, 0, 0, 1, 0, 0, 1, 1]]
+Fitness:  560.0
+
+Execução 6:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 22:56:05.054195
+gen	min    	max    	avg    	std    
+0  	594,142	878,798	782,816	52,2908
+1  	588,284	871,092	750,288	58,2635
+307	560    	866,728	563,852	21,8377
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 23:01:04.367295
+Tempo Total (hh:mm:ss.ms) 0:04:59.313100
+Individuo: [[7, 1, 3, 0, 5, 4, 2, 6], [0, 0, 1, 0, 1, 1, 1, 1]]
+Fitness:  560.0
+
+Execução 7:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 23:01:05.118676
+gen	min    	max    	avg    	std    
+0  	601,623	879,088	781,668	53,2134
+1  	574,142	874,076	748,076	60,0025
+305	560    	824,076	563,572	20,8919
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 23:05:58.995163
+Tempo Total (hh:mm:ss.ms) 0:04:53.876487
+Individuo: [[7, 1, 3, 0, 5, 4, 2, 6], [0, 0, 1, 0, 1, 1, 1, 1]]
+Fitness:  560.0
+
+Execução 8:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 23:05:59.765129
+gen	min	max    	avg    	std    
+0  	600	878,798	783,431	51,5645
+1  	570	875,169	751,233	58,3504
+307	560    	841,848	564,171	23,8835
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 23:10:56.707368
+Tempo Total (hh:mm:ss.ms) 0:04:56.942239
+Individuo: [[6, 2, 4, 5, 0, 3, 1, 7], [0, 0, 0, 0, 1, 0, 1, 1]]
+Fitness:  560.0
+
+Execução 9:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 23:10:57.444378
+gen	min    	max    	avg    	std    
+0  	588,284	884,208	782,564	52,2699
+1  	588,284	878,153	750,549	57,9889
+305	560    	841,848	564,031	22,7106
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 23:15:57.374037
+Tempo Total (hh:mm:ss.ms) 0:04:59.929659
+Individuo: [[7, 1, 3, 2, 4, 5, 0, 6], [0, 0, 1, 0, 0, 0, 1, 1]]
+Fitness:  560.0
+
+Execução 10:
+
+Tempo de Inicio (hh:mm:ss.ms) 2019-09-11 23:15:58.108507
+gen	min	max    	avg    	std    
+0  	590	880,579	782,584	52,7729
+1  	588,284	874,208	749,52 	58,4778
+307	560    	860,514	564,194	23,8001
+Tempo de Termino (hh:mm:ss.ms) 2019-09-11 23:20:55.216641
+Tempo Total (hh:mm:ss.ms) 0:04:57.108134
+Individuo: [[7, 1, 3, 4, 5, 0, 2, 6], [0, 0, 1, 0, 0, 1, 1, 1]]
+Fitness:  560.0
+
