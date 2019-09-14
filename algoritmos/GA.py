@@ -36,7 +36,8 @@ def midPoint(x1, y1, x2, y2):
 
 
 def plotar(individuo, f):
-    """."""
+    """.""" 
+    plt.close()
     fig1, f1_axes = plt.subplots(ncols=2, nrows=1, constrained_layout=True)
     # fig1.figure(figsize=(15, 15))
     fig1.set_size_inches((20, 15))
@@ -249,11 +250,11 @@ files = [
     # 'rinstance_01_9pol',
     # 'rinstance_01_10pol',
     # 'sinstance_01_2pol_sep',
-    'sinstance_01_3pol_sep',
-    'sinstance_01_4pol_sep',
-    'sinstance_01_5pol_sep',
-    'sinstance_01_6pol_sep',
-    'sinstance_01_7pol_sep',
+    # 'sinstance_01_3pol_sep',
+    # 'sinstance_01_4pol_sep',
+    # 'sinstance_01_5pol_sep',
+    # 'sinstance_01_6pol_sep',
+    # 'sinstance_01_7pol_sep',
     'sinstance_01_8pol_sep',
     'sinstance_01_9pol_sep',
     'sinstance_01_10pol_sep',
