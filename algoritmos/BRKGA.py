@@ -178,7 +178,7 @@ def evalCut(individuo, pi=1, mi=5):
     return dist,
 
 
-def main(P=10000, Pe=0.2, Pm=0.3, pe=0.7, NumGenWithoutConverge=300, file=None):
+def main(P=10000, Pe=0.2, Pm=0.3, pe=0.7, NumGenWithoutConverge=150, file=None):
     """
     Execute Genetic Algorithm.
 
@@ -355,7 +355,7 @@ if True:
         toolbox.register("map", map)
 
         hof = None
-        qtd = 10
+        qtd = 5
         # if True:
         #     file_write = None
         with open(f"../resultados/brkga/{f}.txt", mode='w+') as file_write:
