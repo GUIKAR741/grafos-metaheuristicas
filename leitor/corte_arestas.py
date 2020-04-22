@@ -16,7 +16,7 @@ class Grafo:
         self.v = v
         self.e = e
 
-    def addAresta(self, v1: (int or float), v2: (int or float), p: (int or float)=0):
+    def addAresta(self, v1: (int or float), v2: (int or float), p: (int or float) = 0):
         """."""
         if not (v1 in self._g.keys()):
             self._g[v1] = {}
@@ -116,6 +116,7 @@ def cortar(ent, mostra=True):
         ent2 = [float(j) for j in ent[i]]
         g.addAresta((ent2[0], ent2[1]), (ent2[2], ent2[3]), ent2[4])
     return corta(g.g, 1, 5, mostra)
+
 
 if __name__ == "__main__":
     ent = [[int(i) for i in input().split()]]

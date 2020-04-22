@@ -16,21 +16,21 @@ def ler_grafo(ent, mostra=True):
     """."""
     parse = bs(ent, 'lxml')
     pontos = {}
-    l = []
     for i in parse.find_all('polygon'):
-        # if not ('str0' in i.get('class')):
-        lvez = []
-        for k in list(map(lambda x: x.split(','), i.get('points').split())):
-            x1, y1 = list(map(float, k))
-            if not ((x1, y1) in pontos.keys()):
-                pontos[(x1, y1)] = {}
-            lvez.append((x1, y1))
-        for j in range(len(lvez)):
-            if lvez[(j - 1)] != lvez[j]:
-                pontos[lvez[j]][lvez[j - 1]] = dist2pt(*lvez[j], *lvez[j - 1])
-            if lvez[0 if j + 1 >= len(lvez) else j + 1] != lvez[j]:
-                pontos[lvez[j]][lvez[0 if j + 1 >= len(lvez) else j + 1]] = dist2pt(
-                    *lvez[j], *lvez[0 if j + 1 >= len(lvez) else j + 1])
+        points = list(
+            map(
+                lambda x: tuple(map(float, x)),
+                map(
+                    lambda x: x.split(','),
+                    i.get('points').split()
+                )
+            )
+        )
+        for k in range(len(points)):
+            if not (points[k] in pontos.keys()):
+                pontos[points[k]] = {}
+            j = 0 if k + 1 >= len(points) else k + 1
+            pontos[points[k]][points[j]] = dist2pt(*points[k], *points[j])
     out = ''
     if mostra:
         print(len(pontos.keys()), sum([len(i) for i in pontos.values()]))
@@ -41,6 +41,7 @@ def ler_grafo(ent, mostra=True):
                 print(*i, *k, ("%.2lf" % l))
             out += f"\n{i[0]} {i[1]} {k[0]} {k[1]} " + ("%.2lf" % l)
     return out
+
 
 if __name__ == "__main__":
     ent = ''

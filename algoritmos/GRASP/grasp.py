@@ -1,5 +1,5 @@
 """."""
-from math import ceil, floor
+from math import ceil, floor, fabs
 from solution import Solution
 from pprint import pprint
 from collections import OrderedDict
@@ -149,7 +149,8 @@ def evalCut(individuo: Solution, pi: float = 1, mi: float = 5) -> float:
 
 def dist2pt(x1: float, y1: float, x2: float, y2: float) -> float:
     """."""
-    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** (1 / 2)
+    return max(fabs(x2 - x1), fabs(y2 - y1))  # Distancia de Chebyschev
+    # return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** (1 / 2) # Distancia Euclidiana
 
 
 def midPoint(x1, y1, x2, y2):
@@ -205,7 +206,7 @@ def GRASP(maximoIteracoes: int, seed=None) -> Solution:
     it, itMelhor = 0, 0
     melhorSolucao = Solution()
     while it - itMelhor <= maximoIteracoes:
-        if it % 100 == 0:
+        if it % 1000 == 0:
             print(f"IT: {it} "
                   f"ITMELHOR: {itMelhor} "
                   f"IT-ITMELHOR: {it-itMelhor} "
@@ -265,7 +266,7 @@ files = [
 
     # novas instancias
 
-    # "albano",
+    "albano",
     # "blaz1",
     # "blaz2",
     # "blaz3",
@@ -285,7 +286,7 @@ files = [
     # "instance_artificial_01_26pol_hole",
     # "rco1",
     # "rco2",
-    "rco3",
+    # "rco3",
     # "shapes2",
     # "shapes4",
     # "spfc_instance",
@@ -307,7 +308,7 @@ files = [
     # "instance_01_9pol_sep",
     # "instance_01_10pol_sep",
     # "instance_01_16pol_sep",
-    "instance_artificial_01_26pol_hole_sep",
+    # "instance_artificial_01_26pol_hole_sep",
     # "rco1_sep",
     # "rco2_sep",
     # "rco3_sep",

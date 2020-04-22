@@ -1,7 +1,6 @@
 """."""
 from sympy import Point, Segment
 from sympy.geometry import intersection
-from pprint import pprint
 from matplotlib import pyplot as plt
 
 
@@ -17,7 +16,12 @@ def separaArestas(p1, p2, p3, p4=None):
     return arestas_separadas
 
 
-def partir(ent, mostra=True):
+def midPoint(x1, y1, x2, y2):
+    """."""
+    return (x1 + x2) / 2, (y1 + y2) / 2
+
+
+def partir(ent, mostra=True, plotar=False):
     """."""
     n = int(ent[0][0])
     ent.pop(0)
@@ -77,24 +81,27 @@ def partir(ent, mostra=True):
         if mostra:
             print(*i)
             # print(float(i.p1.x), float(i.p1.y), float(i.p2.x), float(i.p2.y))
-    # X = []
-    # Y = []
-    # for i in arestas_final:
-    #     X.append(i.p1.x)
-    #     X.append(i.p2.x)
-    #     Y.append(i.p1.y)
-    #     Y.append(i.p2.y)
-    # minimoX = min(X)
-    # maximoX = max(X)
-    # minimoY = min(Y)
-    # maximoY = max(Y)
-    # plt.xlim(-10, 100)
-    # plt.ylim(-10, 100)
-    # j = 1
-    # for i in arestas_final:
-    #     plt.plot([i.p1.x, i.p2.x], [i.p1.y, i.p2.y])
-    #     plt.savefig(f'img/g{j}.png')
-    #     j += 1
+    if plotar:
+        X = []
+        Y = []
+        for p1x, p1y, p2x, p2y in arestas_final:
+            X.append(p1x)
+            X.append(p2x)
+            Y.append(p1y)
+            Y.append(p2y)
+        minimoX = min(X)
+        maximoX = max(X)
+        minimoY = min(Y)
+        maximoY = max(Y)
+        plt.xlim(minimoX - 1, maximoX + 1)
+        plt.ylim(minimoY - 1, maximoY + 1)
+        j = 1
+        for p1x, p1y, p2x, p2y in arestas_final:
+            plt.plot([p1x, p2x], [p1y, p2y], color="red")
+            plt.annotate(str(j), midPoint(p1x, p1y, p2x, p2y))
+            # plt.savefig(f'img/g{j}.png')
+            j += 1
+        plt.show()
     return out
 
 
