@@ -45,7 +45,6 @@ class Grafo:
 
 def plotar(grafo):
     """."""
-
     def midPoint(x1, y1, x2, y2):
         """."""
         return (x1 + x2) / 2, (y1 + y2) / 2
@@ -72,23 +71,24 @@ if __name__ == "__main__":
     # print("LENDO")
     ent = ler_grafo(ent, mostra=False)
     ent = ler(ent)
-    # v = ent[0][0]
-    # print("VERTICES:", int(ent[0][0]), "ARESTAS:", int(ent[0][1]))
+    v = ent[0][0]
+    print("VERTICES:", int(ent[0][0]), "ARESTAS:", int(ent[0][1]))
 
     # print("CORTANDO")
     # ent = cortar(ent, mostra=False)
     # ent = ler(ent)
     # print("ARESTAS:", int(*ent[0]))
 
-    # g = Grafo(v, len(ent))
+    # g = Grafo(v, len(ent[1:]))
     # for i in ent[1:]:
     #     g.addAresta((i[0], i[1]), (i[2], i[3]))
     # print("CLIQUE:", len(g.clique))
 
     # print("PARTINDO")
-    partir(ent)
-    # print("ARESTAS:", len(ent))
-    # g = Grafo(v, len(ent))
-    # for i in ent:
+    ent = partir(ent, mostra=False)
+    ent = ler(ent)
+    print("ARESTAS:", int(ent[0][0]))
+    # g = Grafo(v, len(ent[1:]))
+    # for i in ent[1:]:
     #     g.addAresta((i[0], i[1]), (i[2], i[3]))
     # print("CLIQUE:", len(g.clique))

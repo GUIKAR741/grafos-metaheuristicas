@@ -10,7 +10,9 @@ from deap import tools
 import matplotlib.pyplot as plt
 
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import datetime, timedelta
+
+from math import fabs
 
 
 @contextmanager
@@ -39,26 +41,27 @@ def midPoint(x1, y1, x2, y2):
 def plotar(individuo, f):
     """."""
     plt.close()
-    fig1, f1_axes = plt.subplots(ncols=2, nrows=1, constrained_layout=True)
+    fig1, f1_axes = plt.subplots(ncols=1, nrows=1, constrained_layout=True)
     # fig1.figure(figsize=(15, 15))
-    fig1.set_size_inches((20, 15))
+    # fig1.set_size_inches((20, 15))
     x1, y1, x, y = [], [], [], []
-    colors = ["red", "yellow"]
+    colors = ["red", "gray"]
     cutA = 1
     i1 = individuo[0][0]
     a1 = edges[i1] if individuo[1][0] == 0 else edges[i1][::-1]
-    if a1[0] != (0.0, 0.0):
-        x1.append(0.0)
-        y1.append(0.0)
-        x1.append(a1[0][0])
-        y1.append(a1[0][1])
-        # plt.annotate("Des-"+str(deslocamento), midPoint(
-        #     0, 0, *edges[individuo[0]][0]))
-        # deslocamento += 1
-        f1_axes[1].plot(x1, y1, "-", color=colors[1])
-        f1_axes[1].annotate(str(cutA), midPoint(0, 0, a1[0][0], a1[0][1]))
-        cutA += 1
-        # plt.plot(x1, y1, '-*', color=colors[1])
+    deslocamentos = []
+    # if a1[0] != (0.0, 0.0):
+    #     x1.append(0.0)
+    #     y1.append(0.0)
+    #     x1.append(a1[0][0])
+    #     y1.append(a1[0][1])
+    # plt.annotate("Des-"+str(deslocamento), midPoint(
+    #     0, 0, *edges[individuo[0]][0]))
+    # deslocamento += 1
+    # f1_axes.plot(x1, y1, "-", color=colors[1])
+    # f1_axes.annotate(str(cutA), midPoint(0, 0, a1[0][0], a1[0][1]))
+    # cutA += 1
+    # plt.plot(x1, y1, '-*', color=colors[1])
     x.append(a1[0][0])
     y.append(a1[0][1])
     x.append(a1[1][0])
@@ -66,8 +69,9 @@ def plotar(individuo, f):
     # plt.plot(x, y, '-*', color=colors[0])
     # plt.annotate(str(cutA), midPoint(
     #     *a1[0], *a1[1]))
-    f1_axes[0].plot(x, y, "-", color=colors[0])
-    f1_axes[0].annotate(str(cutA), midPoint(*a1[0], *a1[1]))
+    f1_axes.quiver(x[0], y[0], x[1] - x[0], y[1] - y[0],
+                   scale_units='xy', angles='xy', scale=1, color=colors[0])
+    f1_axes.annotate(str(cutA), midPoint(*a1[0], *a1[1]))
     cutA += 1
     for i in range(len(individuo[0]) - 1):
         i1 = individuo[0][i]
@@ -89,8 +93,13 @@ def plotar(individuo, f):
             #     *edges[i1][1], *edges[i2][0]))
             # deslocamento += 1
             # plt.plot(x1, y1, '-*', color=colors[1])
-            f1_axes[1].plot(x1, y1, "-", color=colors[1])
-            f1_axes[1].annotate(str(cutA), midPoint(*a1[1], *a2[0]))
+            # f1_axes.plot(x1, y1, "-", color=colors[1])
+            # f1_axes.annotate(str(cutA), midPoint(*a1[1], *a2[0]))
+            deslocamentos.append({
+                'pontos': [x1[0], y1[0], x1[1] - x1[0], y1[1] - y1[0]],
+                'annot': str(cutA),
+                'mid': midPoint(*a1[1], *a2[0])
+            })
             cutA += 1
         x.append(a2[0][0])
         y.append(a2[0][1])
@@ -99,14 +108,20 @@ def plotar(individuo, f):
         # plt.annotate(str(cutA), midPoint(
         #     *a2[0], *a2[1]))
         # plt.plot(x, y, '-*', color=colors[0])
-        f1_axes[0].annotate(str(cutA), midPoint(*a2[0], *a2[1]))
-        f1_axes[0].plot(x, y, "-", color=colors[0])
+        f1_axes.annotate(str(cutA), midPoint(*a2[0], *a2[1]))
+        f1_axes.quiver(x[0], y[0], x[1] - x[0], y[1] - y[0],
+                       scale_units='xy', angles='xy', scale=1, color=colors[0])
         cutA += 1
-    f1_axes[1].set_xlim(*f1_axes[0].get_xlim())
-    f1_axes[1].set_ylim(*f1_axes[0].get_ylim())
+    for i in deslocamentos:
+        f1_axes.annotate(i['annot'], (i['mid'][0] - 3, i['mid'][1]))
+        f1_axes.quiver(*i['pontos'], width=.005,
+                       scale_units='xy', angles='xy', scale=1, color=colors[1])
+    f1_axes.set_xlim(*f1_axes.get_xlim())
+    f1_axes.set_ylim(*f1_axes.get_ylim())
     # plt.show()
-    fig1.savefig(f"../resultados/ga/plot/{f}.png")
-    # plt.close()
+    plt.title("Tempo Requerido: {:.2f}".format(individuo.fitness.values[0]))
+    fig1.savefig(f"plots/ga/{f}.png", dpi=300)
+    plt.close()
 
 
 def genIndividuo(edges):
@@ -125,7 +140,7 @@ def genIndividuo(edges):
     return random.sample(range(len(edges)), len(edges)), v
 
 
-def evalCut(individuo, pi=1, mi=5):
+def evalCut(individuo, pi=16.67, mi=400):
     """
     Eval Edges Cut.
 
@@ -141,7 +156,7 @@ def evalCut(individuo, pi=1, mi=5):
     i1 = individuo[0][0]
     a1 = edges[i1] if individuo[1][0] == 0 else edges[i1][::-1]
     if a1 != (0.0, 0.0):
-        dist += dist2pt(0.0, 0.0, *a1[0])
+        dist += dist2pt(0.0, 0.0, *a1[0]) / mi
     dist += (dist2pt(*a1[0], *a1[1])) / pi
     for i in range(len(individuo[0]) - 1):
         i1 = individuo[0][i]
@@ -156,11 +171,15 @@ def evalCut(individuo, pi=1, mi=5):
             dist += (dist2pt(*a2[0], *a2[1])) / pi
         else:
             dist += (dist2pt(*a1[1], *a2[0])) / mi + (dist2pt(*a2[0], *a2[1])) / pi
+    iu = individuo[0][-1]
+    au = edges[iu] if individuo[1][-1] == 0 else edges[iu][::-1]
+    if au != (0.0, 0.0):
+        dist += dist2pt(*au[1], 0.0, 0.0) / mi
     individuo.fitness.values = (dist,)
     return (dist,)
 
 
-def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=100, file=None):
+def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=10, file=None):
     """
     Execute Genetic Algorithm.
 
@@ -172,6 +191,8 @@ def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=100, file=None):
         file -> if write results in file
 
     """
+    tempo = timedelta(seconds=300)
+
     pop = toolbox.population(n=pop)
 
     gen, genMelhor = 0, 0
@@ -191,7 +212,11 @@ def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=100, file=None):
     p = stats.compile(pop)
     logbook.record(gen=0, **p)
     logbook.header = "gen", "min", "max", "avg", "std"
+    gens, inds = [], []
+    gens.append(gen)
+    inds.append(melhor[0])
     print(logbook.stream, file=file)
+    hora = datetime.now()
     while gen - genMelhor <= NumGenWithoutConverge:
         # Select the next generation individuals
         offspring = toolbox.select(pop, len(pop))
@@ -231,114 +256,137 @@ def main(pop=10000, CXPB=0.75, MUTPB=0.1, NumGenWithoutConverge=100, file=None):
         else:
             print(logbook.stream, file=file)
         hof.update(pop)
-    return pop, stats, hof
+        gens.append(gen)
+        inds.append(minF[0])
+
+        if (datetime.now() - hora) > tempo:
+            break
+    return pop, stats, hof, gens, inds
 
 
 files = [
-    # 'instance_01_2pol',
-    # 'instance_01_3pol',
-    # 'instance_01_4pol',
-    # 'instance_01_5pol',
-    # 'instance_01_6pol',
-    # 'instance_01_7pol',
-    # 'instance_01_8pol',
-    # 'instance_01_9pol',
-    # 'instance_01_10pol',
-    "rinstance_01_2pol",
-    # 'rinstance_01_3pol',
-    # 'rinstance_01_4pol',
-    # 'rinstance_01_5pol',
-    # 'rinstance_01_6pol',
-    # 'rinstance_01_7pol',
-    # 'rinstance_01_8pol',
-    # 'rinstance_01_9pol',
-    # 'rinstance_01_10pol',
-    # 'sinstance_01_2pol_sep',
-    # 'sinstance_01_3pol_sep',
-    # 'sinstance_01_4pol_sep',
-    # 'sinstance_01_5pol_sep',
-    # 'sinstance_01_6pol_sep',
-    # 'sinstance_01_7pol_sep',
-    # 'sinstance_01_8pol_sep',
-    # 'sinstance_01_9pol_sep',
-    # 'sinstance_01_10pol_sep',
-    # 'g3',
-    # 'geo1',
-    # 'g2',
-    # 'geo3',
-    # 'geozika',
-    # 'FU',
-    # 'rco1',
-    # 'TROUSERS',
-    # 'DIGHE1',
-    # 'DIGHE2',
-    # 'teste1',
-    # 'g1',
-    # 'blaz1',
-    # 'rco2',
-    # 'blaz2',
-    # 'rco3',
-    # 'blaz3'
+    'albano',
+    'blaz1',
+    'blaz2',
+    'blaz3',
+    'dighe1',
+    'dighe2',
+    'fu',
+    'instance_01_2pol',
+    'instance_01_3pol',
+    'instance_01_4pol',
+    'instance_01_5pol',
+    'instance_01_6pol',
+    'instance_01_7pol',
+    'instance_01_8pol',
+    'instance_01_9pol',
+    'instance_01_10pol',
+    'instance_01_16pol',
+    'instance_artificial_01_26pol_hole',
+    'rco1',
+    'rco2',
+    'rco3',
+    'shapes2',
+    'shapes4',
+    'spfc_instance',
+    'trousers',
 ]
+
+opcoes = {'pop': [10000, 5000, 1000], 'elite': [.7, .75, .8], 'mut': [.1, .15, .2]}
+op = []
+for i in opcoes['pop']:
+    for j in opcoes['elite']:
+        for k in opcoes['mut']:
+            op.append((i, j, k))
+print(len(op))
+exit(0)
 # toolbox of GA
 toolbox = base.Toolbox()
 # Class Fitness
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 # Representation Individual
 creator.create("Individual", list, fitness=creator.FitnessMin)
-# if __name__ == "__main__":
-if True:
-    for f in files:
-        file = open(f"../../datasets/particao_arestas/{f}.txt").read().strip().split("\n")
-        edges = []
-        if file:
-            n = int(file.pop(0))
-            for i in range(len(file)):
-                a = [float(j) for j in file[i].split()]
-                edges.append([(a[0], a[1]), (a[2], a[3])])
-        # Generate Individual
-        toolbox.register("indices", genIndividuo, edges)
-        # initializ individual
-        toolbox.register(
-            "individual", tools.initIterate, creator.Individual, toolbox.indices
-        )
-        # Generate Population
-        toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-        # Selection
-        toolbox.register("select", tools.selTournament, tournsize=3)
-        # Crossover
-        toolbox.register("mate0", tools.cxPartialyMatched)
-        toolbox.register("mate1", tools.cxTwoPoint)
-        # Mutate
-        toolbox.register("mutate0", tools.mutShuffleIndexes, indpb=0.05)
-        toolbox.register("mutate1", tools.mutFlipBit, indpb=0.05)
-        # toolbox.register("mutate0", tools.mutShuffleIndexes, indpb=0.05)
-        # toolbox.register("mutate1", tools.mutFlipBit, indpb=0.05)
-        # Objective Function
-        toolbox.register("evaluate", evalCut)
-        # function to execute map
-        toolbox.register("map", map)
-        #     n = int(input())
-        #     edges = []
-        #     for i in range(n):
-        #         a = [float(j) for j in input().split()]
-        #         edges.append([(a[0], a[1]), (a[2], a[3])])
-        hof = None
-        qtd = 10
-        print(toolbox.individual())
-        exit(0)
-        # if True:
-        #     file_write = None
-        with open(f"../resultados/ga/{f}.txt", mode="w+") as file_write:
-            print("GA:", file=file_write)
-            print(file=file_write)
-            for i in range(qtd):
-                print(f"Execução {i+1}:", file=file_write)
-                print(file=file_write)
-                iteracao = None
-                with timeit(file_write=file_write):
-                    iteracao = main(file=file_write)
-                print("Individuo:", iteracao[2][0], file=file_write)
-                print("Fitness: ", iteracao[2][0].fitness.values[0], file=file_write)
-                print(file=file_write)
-                plotar(iteracao[2][0], f + "-" + str(i + 1))
+tipo = ['packing', 'separated']
+if __name__ == "__main__":
+    for t in tipo:
+        for f in files:
+            file = open(f"ejor/{t}/{f}.txt").read().strip().split("\n")
+            edges = []
+            if file:
+                n = int(file.pop(0))
+                for i in range(len(file)):
+                    a = [float(j) for j in file[i].split()]
+                    edges.append([(a[0], a[1]), (a[2], a[3])])
+            # Generate Individual
+            toolbox.register("indices", genIndividuo, edges)
+            # initializ individual
+            toolbox.register(
+                "individual", tools.initIterate, creator.Individual, toolbox.indices
+            )
+            # Generate Population
+            toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+            # Selection
+            toolbox.register("select", tools.selTournament, tournsize=3)
+            # Crossover
+            toolbox.register("mate0", tools.cxPartialyMatched)
+            toolbox.register("mate1", tools.cxTwoPoint)
+            # Mutate
+            toolbox.register("mutate0", tools.mutShuffleIndexes, indpb=0.05)
+            toolbox.register("mutate1", tools.mutFlipBit, indpb=0.05)
+            # toolbox.register("mutate0", tools.mutShuffleIndexes, indpb=0.05)
+            # toolbox.register("mutate1", tools.mutFlipBit, indpb=0.05)
+            # Objective Function
+            toolbox.register("evaluate", evalCut)
+            # function to execute map
+            toolbox.register("map", map)
+            #     n = int(input())
+            #     edges = []
+            #     for i in range(n):
+            #         a = [float(j) for j in input().split()]
+            #         edges.append([(a[0], a[1]), (a[2], a[3])])
+            hof = None
+            qtd = 1
+            for k in op:
+                # if True:
+                #     file_write = None
+                with open(f"resultados/ga/{t}/{f}.txt", mode="w+") as file_write:
+                    print("GA:", file=file_write)
+                    print(file=file_write)
+                    for i in range(qtd):
+                        iteracao = None
+                        print(f"Execução {i+1}:", file=file_write)
+                        print(
+                            f"Parametros: P={k[0]}, Pe={k[1]}, Pm={k[2]}, pe=0.7, Parada=150",
+                            file=file_write
+                        )
+                        with timeit(file_write=file_write):
+                            iteracao = main(
+                                pop=k[0],
+                                CXPB=k[1],
+                                MUTPB=k[2],
+                                file=file_write
+                            )
+                        print("Individuo:", iteracao[2][0], file=file_write)
+                        print("Fitness: ", iteracao[2][0].fitness.values[0], file=file_write)
+                        print("Gens: ", iteracao[3], file=file_write)
+                        print("Inds: ", iteracao[4], file=file_write)
+                        print(file=file_write)
+                        plotar(iteracao[2][0],
+                               f"{t}/{f}_[{k[0]}, {k[1]}, {k[2]}]" + "-" + str(i + 1))
+                        fig1, f1_axes = plt.subplots(ncols=1, nrows=1, constrained_layout=True)
+                        fig1.set_size_inches((10, 10))
+                        gens, inds = iteracao[3], iteracao[4]
+                        f1_axes.set_ylabel("Valor do Melhor Individuo")
+                        f1_axes.set_xlabel("Gerações")
+                        f1_axes.grid(True)
+                        f1_axes.set_xlim(0, gens[-1])
+                        f1_axes.set_ylim(inds[-1] - 10, inds[0] + 10)
+                        f1_axes.plot(gens, inds, color='blue')
+                        fig1.savefig(
+                            f'melhora/ga/{t}/' + f"{f}_[{k[0]}, {k[1]}, {k[2]}]-" + str(
+                                i + 1
+                            ) + '.png',
+                            dpi=300
+                        )
+                        # plt.show()
+                        plt.close()

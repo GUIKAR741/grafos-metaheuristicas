@@ -23,7 +23,7 @@ def midPoint(x1, y1, x2, y2):
 
 def partir(ent, mostra=True, plotar=False):
     """."""
-    n = int(ent[0][0])
+    n = int(ent[0][1])
     ent.pop(0)
     arestas = []
     for i in range(n):
@@ -68,8 +68,9 @@ def partir(ent, mostra=True, plotar=False):
         i = 0
     set_arestas_final = set()
     for i in arestas_final:
-        if not((i.p1.x, i.p1.y, i.p2.x, i.p2.y) in set_arestas_final or
-               (i.p2.x, i.p2.y, i.p1.x, i.p1.y) in set_arestas_final):
+        if not((i.p1.x, i.p1.y, i.p2.x, i.p2.y) in set_arestas_final or (i.p2.x, i.p2.y,
+                                                                         i.p1.x, i.p1.y)
+               in set_arestas_final):
             set_arestas_final.add((float(i.p1.x), float(
                 i.p1.y), float(i.p2.x), float(i.p2.y)))
     arestas_final = set_arestas_final

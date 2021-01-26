@@ -16,6 +16,7 @@ def ler_grafo(ent, mostra=True):
     """."""
     parse = bs(ent, 'lxml')
     pontos = {}
+    print('Poligonos:', len(parse.find_all('polygon')))
     for i in parse.find_all('polygon'):
         points = list(
             map(
